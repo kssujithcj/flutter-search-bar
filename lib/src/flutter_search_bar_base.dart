@@ -48,6 +48,8 @@ class SearchBar {
   /// The last built default AppBar used for colors and such.
   AppBar _defaultAppBar;
 
+  VoidCallback onCleared;
+
   SearchBar({
     @required this.setState,
     @required this.buildDefaultAppBar,
@@ -58,7 +60,8 @@ class SearchBar {
     this.colorBackButton = true,
     this.closeOnSubmit = true,
     this.clearOnSubmit = true,
-    this.showClearButton = true
+    this.showClearButton = true,
+    this.onCleared,
   }) {
     if (this.controller == null) {
       this.controller = new TextEditingController();
@@ -138,9 +141,15 @@ class SearchBar {
     Color textColor = inBar ? Colors.white70 : Colors.black54;
 
     return new AppBar(
-      leading: new BackButton(
-        color: buttonColor
-      ),
+      leading: IconButton(
+          icon: Icon(TargetPlatform == TargetPlatform.iOS ? Icons.arrow_back : Icons.arrow_back_ios),
+          color: buttonColor,
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () {
+            Navigator.maybePop(context);
+            controller.text = "";
+            if(onCleared!= null) { onCleared();}
+          } ),
       backgroundColor: barColor,
       title: new Directionality(
         textDirection: Directionality.of(context),
