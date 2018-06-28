@@ -50,6 +50,8 @@ class SearchBar {
 
   VoidCallback onCleared;
 
+  VoidCallback onBeginSearch;
+
   SearchBar({
     @required this.setState,
     @required this.buildDefaultAppBar,
@@ -62,6 +64,7 @@ class SearchBar {
     this.clearOnSubmit = true,
     this.showClearButton = true,
     this.onCleared,
+    this.onBeginSearch,
   }) {
     if (this.controller == null) {
       this.controller = new TextEditingController();
@@ -200,6 +203,7 @@ class SearchBar {
     return new IconButton(
       icon: new Icon(Icons.search),
       onPressed: () {
+        onBeginSearch();
         beginSearch(context);
       }
     );
